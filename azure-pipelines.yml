@@ -26,13 +26,6 @@ steps:
     php -version
   displayName: 'Use PHP version $(phpVersion)'
   
-- task: ArchiveFiles@1
-  displayName: Archive files
-  inputs:
-    rootFolder: $(System.DefaultWorkingDirectory)
-    includeRootFolder: false
-    packagetype: zip
-
 
 - task: PublishBuildArtifacts@1
   displayName: Publish Artifact
@@ -45,4 +38,4 @@ steps:
     azureSubscription: $(serviceConnectionToAzure)
     appType: webAppLinux
     appName: $(appName)
-    package: $(build.artifactstagingdirectory)/**/*.zip
+    package: $(build.artifactstagingdirectory)/*.zip
