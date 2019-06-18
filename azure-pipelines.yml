@@ -14,6 +14,20 @@ variables:
   azureSubscription: exit
   appname: phptest
 
+# Azure PowerShell
+# Run a PowerShell script within an Azure environment
+- task: AzurePowerShell@4
+  inputs:
+    azureSubscription: 
+    scriptType: inlineScript
+    inline: |
+      az appservice plan create -n MyPlan
+      az webapp create -g HomeLab -p MyPlan -n phptest --runtime "php|7.1" 
+    #scriptArguments: # Optional
+    #errorActionPreference: 'stop' # Optional. Options: stop, continue, silentlyContinue
+    #failOnStandardError: false # Optional
+    azurePowerShellVersion: latestVersion
+    
 steps:
 - script: |
     sudo update-alternatives --set php /usr/bin/php$(phpVersion)
