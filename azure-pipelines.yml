@@ -11,24 +11,12 @@ pool:
 
 variables:
   phpVersion: 7.2
-  azureSubscription: exit
-  appname: phptest
-steps:
-# Azure PowerShell
-# Run a PowerShell script within an Azure environment
-- task: AzurePowerShell@4
-  inputs:
-    azureSubscription: 
-    scriptType: inlineScript
-    inline: |
-      az appservice plan create -n MyPlan
-      az webapp create -g HomeLab -p MyPlan -n phptest --runtime "php|7.1" 
-    #scriptArguments: # Optional
-    #errorActionPreference: 'stop' # Optional. Options: stop, continue, silentlyContinue
-    #failOnStandardError: false # Optional
-    azurePowerShellVersion: latestVersion
-    
+  serviceConnectionToAzure: exit
+  appName: phpbasetest
 
+
+
+steps:
 - script: |
     sudo update-alternatives --set php /usr/bin/php$(phpVersion)
     sudo update-alternatives --set phar /usr/bin/phar$(phpVersion)
@@ -38,15 +26,24 @@ steps:
     php -version
   displayName: 'Use PHP version $(phpVersion)'
 
-- task: ArchiveFiles@2
+steps:
+- task: ArchiveFiles@1
+  displayName: Archive files
   inputs:
-    rootFolderOrFile: '$(system.defaultWorkingDirectory)'
+    rootFolder: $(System.DefaultWorkingDirectory)
     includeRootFolder: false
+    packagetype: zip
+
+
 - task: PublishBuildArtifacts@1
+  displayName: Publish Artifact
+  inputs:
+    PathtoPublish: $(build.artifactstagingdirectory)
 
 - task: AzureWebApp@1
   displayName: Azure Web App Deploy
   inputs:
-    azureSubscription: $(azureSubscription)
+    azureSubscription: $(serviceConnectionToAzure)
+    appType: webAppLinux
     appName: $(appName)
-    package: $(System.DefaultWorkingDirectory)/**/*.zip
+    package: $(build.artifactstagingdirectory)/**/*.zip
