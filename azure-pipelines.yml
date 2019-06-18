@@ -11,6 +11,8 @@ pool:
 
 variables:
   phpVersion: 7.2
+  azureSubscription: exit
+  appname: phptest
 
 steps:
 - script: |
@@ -27,3 +29,10 @@ steps:
     rootFolderOrFile: '$(system.defaultWorkingDirectory)'
     includeRootFolder: false
 - task: PublishBuildArtifacts@1
+
+- task: AzureWebApp@1
+  displayName: Azure Web App Deploy
+  inputs:
+    azureSubscription: $(azureSubscription)
+    appName: $(appName)
+    package: $(System.DefaultWorkingDirectory)/**/*.zip
