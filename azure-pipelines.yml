@@ -13,7 +13,7 @@ variables:
   phpVersion: 7.2
   azureSubscription: exit
   appname: phptest
-
+steps:
 # Azure PowerShell
 # Run a PowerShell script within an Azure environment
 - task: AzurePowerShell@4
@@ -28,7 +28,7 @@ variables:
     #failOnStandardError: false # Optional
     azurePowerShellVersion: latestVersion
     
-steps:
+
 - script: |
     sudo update-alternatives --set php /usr/bin/php$(phpVersion)
     sudo update-alternatives --set phar /usr/bin/phar$(phpVersion)
