@@ -10,9 +10,9 @@ pool:
   vmImage: 'ubuntu-latest'
 
 variables:
-  phpVersion: 7.0
+  phpVersion: 7.3
   serviceConnectionToAzure: exit
-  appName: phpbasetest
+  appName: myapp0
 
 
 
@@ -33,11 +33,3 @@ steps:
     includeRootFolder: false
 - task: PublishBuildArtifacts@1
 
-
-- task: AzureWebApp@1
-  displayName: Azure Web App Deploy
-  inputs:
-    azureSubscription: $(serviceConnectionToAzure)
-    appType: webAppLinux
-    appName: $(appName)
-    package: $(build.artifactstagingdirectory)/**/*.zip
