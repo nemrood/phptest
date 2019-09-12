@@ -1,3 +1,3 @@
 <?php
-echo 'Database Connected successfully';
+echo 'zebbi';
 ?>
